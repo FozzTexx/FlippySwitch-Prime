@@ -21,14 +21,14 @@ SETUP:	STAX	B	; zero array
 SIEVE:	LDAX	B
 	MOV	E,C
 	INR	C
-	JZ	SIEVED
+	JZ	SIEVED		; This really should stop at 16 instead of rolling over to zero
 	ORA	A
 	JNZ	SIEVE
 	MOV	A,E
 MARK:	ADC	E
 	JC	SIEVE
-	MOV	L,A
-	MOV	M,A
+	MOV	L,A		; Stick whatever is in A in the array cell,
+	MOV	M,A		; all that matters is that it's zero/non-zero
 	JMP	MARK
 
 SIEVED:	MVI	C,2
@@ -48,8 +48,8 @@ INCPR:	INR	C
 DONE:	JMP	DONE
 
 DISP:	OUT	LEDS
-DELAY:	DCX	D
-	MOV	A,D
+DELAY:	DCX	D		; I don't bother to initialie DE. After the first
+	MOV	A,D		; display it will always be zero
 	ORA	E
 	JNZ	DELAY
 	RET
